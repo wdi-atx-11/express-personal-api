@@ -1,6 +1,7 @@
 // require express and other modules
 var express = require('express'),
     app = express();
+    db = require('./models');
 
 // parse incoming urlencoded form data
 // and populate the req.body object
@@ -56,40 +57,58 @@ app.get('/api', function apiIndex(req, res) {
     ]
   })
 });
-// get profile
-// app.get('/api/profile', function (req, res) {
-//     var profile = {
-//       name: 'Kenny Vo',
-//       githubUsername: 'kenzovo',
-//       githubLink:'https://github.com/kenzovo',
-//       personalSiteLink: 'https://kenzovo.github.io/',
-//       currentCity: 'Austin'
-//     };
-//
-//     .exec(function(err, profile){
-//       if (err) {return console.log(err)}
-//     }
-//       res.json(profile);
-//     });
-// });
 
-// get projects
-// app.get('/api/profile', function (req, res) {
-//     var profile = {
-//       name: 'Kenny Vo',
-//       githubUsername: 'kenzovo',
-//       githubLink:'https://github.com/kenzovo',
-//       personalSiteLink: 'https://kenzovo.github.io/',
-//       currentCity: 'Austin'
-//     };
-//
-//     .exec(function(err, profile){
-//       if (err) {return console.log(err)}
-//     }
-//       res.json(profile);
-//     });
-// });
-//
+// get profile
+app.get('/api/profile', function (req, res) {
+    var profile = {
+      name: 'Kenny Vo',
+      githubUsername: 'kenzovo',
+      githubLink:'https://github.com/kenzovo',
+      personalSiteLink: 'https://kenzovo.github.io/',
+      currentCity: 'Austin'
+    };
+      res.json(profile);
+
+});
+
+// get all vacations
+app.get('/api/vacations', function (req, res) {
+  db.Vacation.find({})
+    .exec(function(err, vacations){
+      if (err) {
+        return console.log(err);
+      }
+      res.json(vacations);
+    });
+
+});
+
+// get vacation by id
+app.get('./api/vacations/:id', function (req, res) {
+  db.Vacation.findById(req.params.id)
+    .exec(function(err, vacation) {
+      if (err) {return console.log(err)
+      }
+    res.json(vacation);
+  });
+
+});
+
+// create new vacation
+app.post('/api/vacations', function (req, res) {
+  var newVacation = new db.Vacation({
+      country: req.body.country,
+      date: req.body.date,
+      duration: req.body.duration,
+      photo: req.body.photo
+  });
+
+  db.Vacation.create(newVacation, function(err, succ) {
+    if (err) {return console.log(err)}
+    res.json(succ);
+  });
+
+});
 
 /**********
  * SERVER *

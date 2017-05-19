@@ -1,15 +1,27 @@
-// This file allows us to seed our application with data
-// simply run: `node seed.js` from the root of this project folder.
 
-// var db = require('./models');
+var db = require('./models');
 
-// var new_campsite = {description: "Sharp rocks. Middle of nowhere."}
+var vacationList = [
+  {
+    country: "Austin",
+    date: "September 2016",
+    duration: "1 week",
+    photo: "image"
+  },
+  {
+    country: "New Orleans",
+    date: "April 2017",
+    duration: "1 week",
+    photo: "image"
+  }
+]
 
-// db.Campsite.create(new_campsite, function(err, campsite){
-//   if (err){
-//     return console.log("Error:", err);
-//   }
-
-//   console.log("Created new campsite", campsite._id)
-//   process.exit(); // we're all done! Exit the program.
-// })
+db.Vacation.remove({}, function(err, removedEverything){
+  if(err){return console.log(err);}
+  
+  db.Vacation.create(vacationList, function(err, vacations){
+    if(err){return console.log(err);}
+    console.log(vacations);
+    process.exit(1);
+  });
+});
