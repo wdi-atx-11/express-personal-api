@@ -4,4 +4,11 @@ $(document).ready(function(){
 
 // your code
 
+  $.ajax({
+    method: 'GET',
+    url: '/api/books',
+    success: handleSuccess,
+    error: handleError
+  });
+
 });

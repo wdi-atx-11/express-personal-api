@@ -19,7 +19,7 @@ app.use(function(req, res, next) {
  * DATABASE *
  ************/
 
-// var db = require('./models');
+var db = require('./models');
 
 /**********
  * ROUTES *
@@ -43,13 +43,12 @@ app.get('/', function homepage(req, res) {
  */
 
 app.get('/api', function apiIndex(req, res) {
-  // TODO: Document all your api endpoints below as a simple hardcoded JSON object.
   // It would be seriously overkill to save any of this to your database.
   res.json({
     woopsIForgotToDocumentAllMyEndpoints: true, // CHANGE ME ;)
     message: "Welcome to my personal api! Here's what you need to know!",
     documentationUrl: "https://github.com/example-username/express-personal-api/README.md", // CHANGE ME
-    baseUrl: "http://YOUR-APP-NAME.herokuapp.com", // CHANGE ME
+    baseUrl: "https://stark-wildwood-36615.herokuapp.com/",
     endpoints: [
       {method: "GET", path: "/api", description: "Describes all available endpoints"},
       {method: "GET", path: "/api/profile", description: "Data about me"}, // CHANGE ME
@@ -57,21 +56,40 @@ app.get('/api', function apiIndex(req, res) {
     ]
   })
 });
+// get profile
+// app.get('/api/profile', function (req, res) {
+//     var profile = {
+//       name: 'Kenny Vo',
+//       githubUsername: 'kenzovo',
+//       githubLink:'https://github.com/kenzovo',
+//       personalSiteLink: 'https://kenzovo.github.io/',
+//       currentCity: 'Austin'
+//     };
+//
+//     .exec(function(err, profile){
+//       if (err) {return console.log(err)}
+//     }
+//       res.json(profile);
+//     });
+// });
 
-app.get('/api/profile', function apiIndex(req, res) {
-    var profile = {
-      name: 'Kenny Vo',
-      githubUsername: 'kenzovo',
-      githubLink:'https://github.com/kenzovo',
-      personalSiteLink: 'https://kenzovo.github.io/',
-      currentCity: 'Austin'
-    };
-
-    exec(function(err, profile){
-      if (err) {return console.log(err)}
-      res.json(profile)
-    });
-});
+// get projects
+// app.get('/api/profile', function (req, res) {
+//     var profile = {
+//       name: 'Kenny Vo',
+//       githubUsername: 'kenzovo',
+//       githubLink:'https://github.com/kenzovo',
+//       personalSiteLink: 'https://kenzovo.github.io/',
+//       currentCity: 'Austin'
+//     };
+//
+//     .exec(function(err, profile){
+//       if (err) {return console.log(err)}
+//     }
+//       res.json(profile);
+//     });
+// });
+//
 
 /**********
  * SERVER *
