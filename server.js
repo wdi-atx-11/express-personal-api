@@ -1,8 +1,7 @@
 // require express and other modules
 var express = require('express'),
     app = express();
-    db = require('./models');
-
+    
 // parse incoming urlencoded form data
 // and populate the req.body object
 var bodyParser = require('body-parser');
@@ -38,22 +37,22 @@ app.get('/', function homepage(req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-
 /*
  * JSON API Endpoints
  */
 
 app.get('/api', function apiIndex(req, res) {
-  // It would be seriously overkill to save any of this to your database.
   res.json({
-    woopsIForgotToDocumentAllMyEndpoints: true, // CHANGE ME ;)
     message: "Welcome to my personal api! Here's what you need to know!",
-    documentationUrl: "https://github.com/example-username/express-personal-api/README.md", // CHANGE ME
+    documentationUrl: "https://github.com/example-username/express-personal-api/README.md",
     baseUrl: "https://stark-wildwood-36615.herokuapp.com/",
     endpoints: [
       {method: "GET", path: "/api", description: "Describes all available endpoints"},
-      {method: "GET", path: "/api/profile", description: "Data about me"}, // CHANGE ME
-      {method: "POST", path: "/api/campsites", description: "E.g. Create a new campsite"} // CHANGE ME
+      {method: "GET", path: "/api/profile", description: "Data about me"},
+      {method: "GET", path: "/api/vacations", description: "List of all vacations"},
+      {method: "GET", path: "/api/vacations/:id", description: "Get vacations by ID"},
+      {method: "PUT", path: "/api/vacations/:id", description: "Update vacations by ID"},
+      {method: "DELETE", path: "/api/vacations/:id", description: "Delete vacation by ID"},
     ]
   })
 });
@@ -108,6 +107,31 @@ app.post('/api/vacations', function (req, res) {
     res.json(succ);
   });
 
+});
+
+// update a vacation
+app.put('api/vacations/:id', function (req, res) {
+  var vacationId = req.params.id;
+
+      var updatedVacation = {
+        country: req.body.country,
+        date: req.body.date,
+        duration: req.body.duration,
+        photo: req.body.photo
+      }
+
+    db.Vacation.findOneAndUpdate({_id: vacationId}, updateVacation, { new: true}, function (err, updatedVacation) {
+      if (err) {return console.log(err)}
+      res.send(updateVacation);
+    });
+});
+
+// delete vacation
+app.delete('api/vacations/:id', function (req, res) {
+  var vacationId = req.params.id;
+    db.Vacation.findOneAndRemove({_id: vacationId}, function (err, deletedVacation) {
+      res.json(deletedVacation);
+    });
 });
 
 /**********
