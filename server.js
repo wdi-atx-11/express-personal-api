@@ -58,6 +58,21 @@ app.get('/api', function apiIndex(req, res) {
   })
 });
 
+app.get('/api/profile', function apiIndex(req, res) {
+    var profile = {
+      name: 'Kenny Vo',
+      githubUsername: 'kenzovo',
+      githubLink:'https://github.com/kenzovo',
+      personalSiteLink: 'https://kenzovo.github.io/',
+      currentCity: 'Austin'
+    };
+
+    exec(function(err, profile){
+      if (err) {return console.log(err)}
+      res.json(profile)
+    });
+});
+
 /**********
  * SERVER *
  **********/
