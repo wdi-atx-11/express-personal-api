@@ -99,7 +99,7 @@ app.post('/api/vacations', function (req, res) {
       place: req.body.place,
       date: req.body.date,
       duration: req.body.duration,
-      photo: req.body.photo
+      photos: req.body.photos
   });
 
   db.Vacation.create(newVacation, function(err, succ) {
@@ -109,20 +109,38 @@ app.post('/api/vacations', function (req, res) {
 
 });
 
+// add images to vacation by ID
+app.post('/api/vacations/:vacation_id/photos', function(req, res){
+  var vacationId = req.params.vacation_id;
+  db.Vacation.findById(vacationId)
+  .exec(function(err, foundVacation){
+    if(err) {
+      return console.log(err);
+    } else if (foundVacation === null) {
+      res.status(404).json({error: "No Vacation found by this ID"});
+    } else {
+      foundVacation.photos.push(req.body);
+      foundVacation.save();
+      res.status(201).json(foundVacation);
+    }
+  });
+});
+
+
 // update a vacation
 app.put('/api/vacations/:id', function (req, res) {
   var vacationId = req.params.id;
 
-      var updatedVacation = {
-        place: req.body.place,
-        date: req.body.date,
-        duration: req.body.duration,
-        photo: req.body.photo
-      }
+    var updatedVacation = {
+      place: req.body.place,
+      date: req.body.date,
+      duration: req.body.duration,
+      photos: req.body.photos
+    }
 
-    db.Vacation.findOneAndUpdate({_id: vacationId}, updateVacation, { new: true}, function (err, updatedVacation) {
+    db.Vacation.findOneAndUpdate({_id: vacationId}, updatedVacation, { new: true}, function (err, updatedVacation) {
       if (err) {return console.log(err)}
-      res.send(updateVacation);
+      res.send(updatedVacation);
     });
 });
 
