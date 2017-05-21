@@ -1,7 +1,7 @@
 // require express and other modules
 var express = require('express'),
     app = express();
-    
+
 // parse incoming urlencoded form data
 // and populate the req.body object
 var bodyParser = require('body-parser');
@@ -43,7 +43,7 @@ app.get('/', function homepage(req, res) {
 
 app.get('/api', function apiIndex(req, res) {
   res.json({
-    message: "Welcome to my personal api! Here's what you need to know!",
+    message: "Welcome to my personal api. Routes are below! Learn about my vacations :)",
     documentationUrl: "https://github.com/example-username/express-personal-api/README.md",
     baseUrl: "https://stark-wildwood-36615.herokuapp.com/",
     endpoints: [
@@ -83,7 +83,7 @@ app.get('/api/vacations', function (req, res) {
 });
 
 // get vacation by id
-app.get('./api/vacations/:id', function (req, res) {
+app.get('/api/vacations/:id', function (req, res) {
   db.Vacation.findById(req.params.id)
     .exec(function(err, vacation) {
       if (err) {return console.log(err)
@@ -96,7 +96,7 @@ app.get('./api/vacations/:id', function (req, res) {
 // create new vacation
 app.post('/api/vacations', function (req, res) {
   var newVacation = new db.Vacation({
-      country: req.body.country,
+      place: req.body.place,
       date: req.body.date,
       duration: req.body.duration,
       photo: req.body.photo
@@ -110,11 +110,11 @@ app.post('/api/vacations', function (req, res) {
 });
 
 // update a vacation
-app.put('api/vacations/:id', function (req, res) {
+app.put('/api/vacations/:id', function (req, res) {
   var vacationId = req.params.id;
 
       var updatedVacation = {
-        country: req.body.country,
+        place: req.body.place,
         date: req.body.date,
         duration: req.body.duration,
         photo: req.body.photo
@@ -127,11 +127,13 @@ app.put('api/vacations/:id', function (req, res) {
 });
 
 // delete vacation
-app.delete('api/vacations/:id', function (req, res) {
+app.delete('/api/vacations/:id', function (req, res) {
+  console.log('books delete', req.params);
   var vacationId = req.params.id;
-    db.Vacation.findOneAndRemove({_id: vacationId}, function (err, deletedVacation) {
-      res.json(deletedVacation);
-    });
+  db.Vacation.findOneAndRemove({_id: vacationId})
+    .exec(function (err, deletedVacation) {
+    res.json(deletedVacation);
+  });
 });
 
 /**********

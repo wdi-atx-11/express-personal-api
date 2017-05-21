@@ -1,12 +1,10 @@
 console.log("Sanity Check: JS is working!");
-var template;
-var $vacationList;
+var $vacationsList;
 var allVacations = [];
 
 $(document).ready(function(){
 
-  $vacationList = $('#vacationTarget');
-
+  $vacationsList = $('#vacationTarget');
   $.ajax({
     method: 'GET',
     url: '/api/vacations',
@@ -20,28 +18,47 @@ $(document).ready(function(){
       method: 'POST',
       url: '/api/vacations',
       data: $(this).serialize(),
-      success: newBookSuccess,
-      error: newBookError
+      success: newVacationSuccess,
+      error: newVacationError
     });
 
   });
 
-  $vacationList.on('click', '.deleteBtn', function() {
+  $vacationsList.on('click', '.deleteBtn', function() {
+    console.log('clicked delete button to', '/api/vacations/'+$(this).attr('data-id'));
     $.ajax({
         method: 'DELETE',
         url: '/api/vacations/'+$(this).attr('data-id'),
         success: deleteVacationSuccess,
         error: deleteVacationError
-      });
     });
+  });
 
 });
+
+function deleteVacationSuccess(json) {
+  var vacation = json;
+  var vacationId = vacation._id;
+  for(var i = 0; i < allVacations.length; i++) {
+    console.log(allVacations.length)
+    if(allVacations[i]._id === vacationId) {
+      allVacations.splice(i, 1);
+      break;
+    }
+  }
+  render();
+}
+
+function deleteVacationError() {
+  console.log("vacation deleting error!");
+}
 
 function getVacationHtml(vacation) {
   return `<hr>
           <p>
-            <b>${vacation.country}</b>
-            <button type="button" name="button" class="deleteBtn btn btn-danger pull-right" data-id=${book._id}>Delete</button>
+            <b>${vacation.place}</b>
+            in ${(vacation.date)}
+            <button type="button" name="button" class="deleteBtn btn btn-danger pull-right" data-id=${vacation._id}>Delete</button>
           </p>`;
 }
 
@@ -50,9 +67,9 @@ function getAllVacationsHtml(vacations) {
 }
 
 function render () {
-  $vacationList.empty();
-  var vacationHtml = getAllVacationsHtml(allVacations);
-  $vacationList.append(vacationsHtml);
+  $vacationsList.empty();
+  var vacationsHtml = getAllVacationsHtml(allVacations);
+  $vacationsList.append(vacationsHtml);
 };
 
 
@@ -74,20 +91,4 @@ function newVacationSuccess(json) {
 
 function newVacationError() {
   console.log("new vacation error!");
-}
-
-function deleteVacationSuccess(json) {
-  var vacation = json;
-  var vacationId = vacation._id;
-  for(var index = 0; index < allVacations.length; index++) {
-    if(allVacations[index]._id === vacationId) {
-      allVacations.splice(index, 1);
-      break;
-    }
-  }
-  render();
-}
-
-function deleteVacationError() {
-  console.log("vacation deleting error!");
 }

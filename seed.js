@@ -1,7 +1,7 @@
 
 var db = require('./models');
 
-var vacationList = [
+var vacation_list = [
   {
     country: "Austin",
     date: "September 2016",
@@ -18,8 +18,8 @@ var vacationList = [
 
 db.Vacation.remove({}, function(err, removedEverything){
   if(err){return console.log(err);}
-  
-  db.Vacation.create(vacationList, function(err, vacations){
+
+  db.Vacation.create(vacation_list, function(err, vacations){
     if(err){return console.log(err);}
     console.log(vacations);
     process.exit(1);

@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var VacationSchema = new Schema({
-  country: String,
+  place: String,
   date: String,
   duration: String,
   photo: String
