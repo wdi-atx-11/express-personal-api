@@ -1,4 +1,4 @@
-var mongoose = require("mongoose");
+var mongoose = require('mongoose');
 mongoose.connect( process.env.MONGODB_URI || "mongodb://localhost/personal-api");
 
-// module.exports.Campsite = require("./campsite.js.example");
+module.exports.Vacation = require('./vacation.js');
